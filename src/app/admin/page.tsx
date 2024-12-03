@@ -57,7 +57,7 @@ const Terminal1 = () => {
       loadAssignments();
       loadIdleAssignments();
       loadAllAssignments();
-    }, 5000);
+    }, 10000);
 
     return () => clearInterval(intervalId);
   }, [statusFilter]);
