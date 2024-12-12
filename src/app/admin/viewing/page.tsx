@@ -7,6 +7,7 @@ import toast, { Toaster } from 'react-hot-toast'
 interface VanDriverOperator {
   id: string
   Van: { plate_number: string }
+  Driver: { firstname: string, lastname: string }
 }
 
 interface Driver {
@@ -395,16 +396,21 @@ export default function Component() {
                   .filter((vdo) => drivers.some((driver) => driver.id === vdo.id))
                   .map((vdo) => (
                     <div key={vdo.id} className="flex flex-col items-start">
-                    <div className="flex items-center">
-                      <input
-                      type="checkbox"
-                      id={`vdo-${vdo.id}`}
-                      checked={selectedVanDriverOperator[vdo.id] || false}
-                      onChange={(e) => setSelectedVanDriverOperator({ ...selectedVanDriverOperator, [vdo.id]: e.target.checked })}
-                      className="mr-2"
-                      />
-                      <label htmlFor={`vdo-${vdo.id}`}>{vdo.Van.plate_number} - {drivers.find(driver => driver.id === vdo.id)?.firstname} {drivers.find(driver => driver.id === vdo.id)?.lastname}</label>
-                    </div>
+                    {vdo.Driver && (
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            id={`vdo-${vdo.id}`}
+                            checked={selectedVanDriverOperator[vdo.id] || false}
+                            onChange={(e) => setSelectedVanDriverOperator({ ...selectedVanDriverOperator, [vdo.id]: e.target.checked })}
+                            className="mr-2"
+                            disabled={vdo.Van.year_last_registered.toString() !== new Date().getFullYear().toString()}
+                          />
+                          <label htmlFor={`vdo-${vdo.id}`}>
+                            {vdo.Van.plate_number} - {vdo.Driver.firstname} {vdo.Driver.lastname} - {vdo.Van.year_last_registered} {vdo.Van.year_last_registered.toString() !== new Date().getFullYear().toString() && '(Expired)'}
+                          </label>
+                        </div>
+                    )}
                     {selectedVanDriverOperator[vdo.id] && (
                       <select
                       className="mt-2 border rounded-lg p-2 w-full"

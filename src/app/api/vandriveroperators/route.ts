@@ -8,12 +8,19 @@ export async function GET(req: NextRequest) {
     const vanDriverOperators = await prisma.vanDriverOperator.findMany({
       select: {
         id: true,
-        Van: {
-          select: {
-            plate_number: true,
-          },
+      Van: {
+        select: {
+          plate_number: true,
+          year_last_registered: true,
         },
       },
+      Driver: {
+        select: {
+          firstname: true,
+          lastname: true,
+        },
+      },
+    },
     });
     return NextResponse.json(vanDriverOperators);
   } catch (error: any) {
